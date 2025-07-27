@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+generator erd {
+  provider = "prisma-erd-generator"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AccountStatus {
+  ACTIVE
+  INACTIVE
+  BANNED
+  DELETED
+}
+
+enum UrlStatus {
+  ACTIVE
+  INACTIVE
+  EXPIRED
+  DELETED
+}
+
+model User {
+  id        String        @id @default(uuid())
+  name      String        @unique
+  email     String        @unique
+  password  String
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  status    AccountStatus @default(ACTIVE)
+  deletedAt DateTime?
+
+  urls      Url[]
+  analytics UserAnalytics[]
+}
+
+model Url {
+  id          String    @id @default(uuid())
+  originalUrl String    @db.Text
+  shortCode   String    @unique
+  customAlias String?   @unique
+  title       String?
+  description String?
+  status      UrlStatus @default(ACTIVE)
+  expiresAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  clicks Click[]
+
+  @@index([userId])
+  @@index([shortCode])
+  @@index([customAlias])
+  @@index([createdAt])
+}
+
+model Click {
+  id        String   @id @default(uuid())
+  urlId     String
+  ipAddress String
+  userAgent String?
+  referer   String?
+  country   String?
+  city      String?
+  device    String?
+  browser   String?
+  os        String?
+  timestamp DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  url Url @relation(fields: [urlId], references: [id], onDelete: Cascade)
+
+  @@index([urlId])
+  @@index([timestamp])
+}
+
+model UserAnalytics {
+  id           String   @id @default(uuid())
+  userId       String
+  totalUrls    Int      @default(0)
+  totalClicks  Int      @default(0)
+  lastActivity DateTime @default(now())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId])
+}
