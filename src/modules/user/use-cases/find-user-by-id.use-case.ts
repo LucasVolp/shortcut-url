@@ -21,7 +21,7 @@ export class FindUserByIdUseCase {
             if (err instanceof NotFoundException) {
                 throw err;
             }
-            const error = new ServiceUnavailableException("Error retrieving user", {
+            const error = new ServiceUnavailableException("Something bad happened while retrieving user", {
                 cause: err,
                 description: "Failed to retrieve user"
             });

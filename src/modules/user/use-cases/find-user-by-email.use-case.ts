@@ -23,7 +23,7 @@ export class FindUserByEmailUseCase {
             if (err instanceof NotFoundException) {
                 throw err;
             }
-            const error = new ServiceUnavailableException("Error retrieving user by email", {
+            const error = new ServiceUnavailableException("Something bad happened while retrieving user by email", {
                 cause: err,
                 description: "Failed to retrieve user by email"
             });

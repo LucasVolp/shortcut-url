@@ -34,7 +34,7 @@ export class DeleteUserUseCase {
             if (err instanceof NotFoundException || err instanceof BadRequestException) {
                 throw err;
             }
-            const error = new ServiceUnavailableException("Error deleting user", {
+            const error = new ServiceUnavailableException("Something bad happened while deleting user", {
                 cause: err,
                 description: "Failed to delete user"
             });

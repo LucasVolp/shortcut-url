@@ -28,7 +28,7 @@ export class CreateUserUseCase {
             if (err instanceof ConflictException) {
                 throw err;
             }
-            const error = new ServiceUnavailableException("Error creating user", {
+            const error = new ServiceUnavailableException("Something bad happened while creating user", {
                 cause: err,
                 description: "Failed to create user"
             });

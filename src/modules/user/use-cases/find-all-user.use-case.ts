@@ -20,7 +20,7 @@ export class FindAllUserUseCase {
             this.logger.log(`Found ${users.length} users`);
             return users;
         } catch (err) {
-            const error = new ServiceUnavailableException("Error retrieving users", {
+            const error = new ServiceUnavailableException("Something bad happened while retrieving users", {
                 cause: err,
                 description: "Failed to retrieve users"
             });

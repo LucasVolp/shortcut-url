@@ -36,5 +36,5 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
     @ApiProperty({ required: false })
     @IsOptional()
     @IsDateString()
-    deletedAt?: Date;
+    deletedAt?: string;
 }
