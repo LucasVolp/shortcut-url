@@ -31,7 +31,7 @@ export class UpdateUserUseCase {
             if (err instanceof NotFoundException) {
                 throw err;
             }
-            const error = new ServiceUnavailableException("Error updating user", {
+            const error = new ServiceUnavailableException("Something bad happened while updating user", {
                 cause: err,
                 description: "Failed to update user"
             });
